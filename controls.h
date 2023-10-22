@@ -1,8 +1,4 @@
-﻿#include <vector>
-#include <map>
-#include <tuple>
-
-#pragma once
+﻿#pragma once
 
 // Use VK_ prefix for all keyboard shortcuts.
 // For letters just place in single quote instead (eg: 'A')
@@ -30,25 +26,31 @@ struct BeepData {
 	DWORD freq;
 	DWORD time;
 };
+// 
+// List of mapped values to each beep state. 
+// 
+// Format: 
+// { Frequency, Duration }
+//
+// 
 
-#define DECLARE_BEEP(State, Freq, Time) { BeepState:: State, { Freq, Time } }
-
-static std::map<BeepState, BeepData> beeps =
+static BeepData beeps[] =
 {
-	// Set beep info for all states. 
-	// DECLARE_BEEP(Type, Frequency, Time)
-	// Each state must be only set once!!!
-	// Beep types are: On, Off and Quit
+	// Set beep info for On state.
+	{5000 , 20},
 
-	DECLARE_BEEP(On   , 5000 , 20),
-	DECLARE_BEEP(Off  , 1000 , 20),
-	DECLARE_BEEP(Quit , 300  , 20),
+	// Set beep info for Off state.
+	{1000 , 20},
+
+	// Set beep info for Quit state.
+	{300  , 20},
 };
 
 #undef DECLARE_BEEP
 
 // This set of keys will be pressed (eg: Kiwi clicker there's some special keys to press)
-static std::vector<DWORD> g_keyboard =
+
+static DWORD buttonsToPress[] =
 {
 	// Kiwi security
 	'S',
