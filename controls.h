@@ -26,9 +26,14 @@ enum BeepState
 	Quit
 };
 
-#define DECLARE_BEEP(State, Freq, Time) { BeepState:: State, std::make_pair<DWORD, DWORD>(Freq, Time) }
+struct BeepData {
+	DWORD freq;
+	DWORD time;
+};
 
-static std::map<BeepState, std::pair<DWORD, DWORD>> beeps =
+#define DECLARE_BEEP(State, Freq, Time) { BeepState:: State, { Freq, Time } }
+
+static std::map<BeepState, BeepData> beeps =
 {
 	// Set beep info for all states. 
 	// DECLARE_BEEP(Type, Frequency, Time)
@@ -43,7 +48,7 @@ static std::map<BeepState, std::pair<DWORD, DWORD>> beeps =
 #undef DECLARE_BEEP
 
 // This set of keys will be pressed (eg: Kiwi clicker there's some special keys to press)
-std::vector<DWORD> keyboard =
+static std::vector<DWORD> g_keyboard =
 {
 	// Kiwi security
 	'S',

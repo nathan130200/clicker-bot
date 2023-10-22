@@ -15,8 +15,18 @@ void pressMouse(DWORD event) {
 
 void emitBeepSound(const BeepState state) {
 #if ENABLE_BEEP
-	auto& info = beeps.at(state);
-	Beep(std::get<0>(info), std::get<1>(info));
+
+	auto it = beeps.find(state);
+
+	if (it == beeps.end()) {
+		std::string type = state == 0 ? "On" : state == 1 ? "Off" : "Quit";
+		printf("error: Beep not found for state: %s (%d)", type.c_str(), state);
+		return;
+	}
+	else {
+		Beep(it->second.freq, it->second.time);
+	}
+
 #endif
 }
 
@@ -52,7 +62,7 @@ int main()
 			break;
 
 		if (bSendInput) {
-			for (auto& key : keyboard) {
+			for (auto& key : g_keyboard) {
 				keybd_event(key, 0, 0, 0);
 			}
 
@@ -60,7 +70,7 @@ int main()
 			Sleep(0);
 			pressMouse(MOUSEEVENTF_LEFTUP);
 
-			for (auto& key : keyboard) {
+			for (auto& key : g_keyboard) {
 				keybd_event(key, 0, 2, 0);
 			}
 		}
